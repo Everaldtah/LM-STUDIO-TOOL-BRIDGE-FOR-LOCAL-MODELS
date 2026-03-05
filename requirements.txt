@@ -1,0 +1,10 @@
+# LM Studio Terminal Bridge - Python Dependencies
+
+# HTTP requests library for LM Studio API communication
+requests>=2.31.0
+
+# Rich terminal output formatting
+rich>=13.7.0
+
+# Data validation and settings management
+pydantic>=2.0.0

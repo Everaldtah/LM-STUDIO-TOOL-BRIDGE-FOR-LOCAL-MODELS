@@ -1,0 +1,30 @@
+2026-03-05 20:51:10 | INFO     | bridge.router | Registered 1 tools
+2026-03-05 20:51:37 | INFO     | bridge.router | Registered 1 tools
+2026-03-05 20:51:37 | INFO     | bridge.llm_client | System prompt updated
+2026-03-05 20:51:37 | INFO     | bridge.main | LM Studio client initialized successfully
+2026-03-05 20:51:37 | INFO     | bridge.llm_client | Sending request to LM Studio: Hello! Please respond with 'OK'....
+2026-03-05 20:51:54 | INFO     | bridge.router | Registered 1 tools
+2026-03-05 20:51:54 | INFO     | bridge.main | Executing single command: Get-Process | Select-Object -First 3 | Format-Table Name, Id, CPU
+2026-03-05 20:51:54 | ERROR    | bridge.main | Fatal error: 'Logger' object has no attribute 'log_security_event'
+Traceback (most recent call last):
+  File "C:\LMSTUDIO_TERMINAL_BRIDGE\main.py", line 358, in main
+    bridge.execute_single_command(args.execute)
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^
+  File "C:\LMSTUDIO_TERMINAL_BRIDGE\main.py", line 255, in execute_single_command
+    result = self.executor.execute(command)
+  File "C:\LMSTUDIO_TERMINAL_BRIDGE\terminal_executor.py", line 53, in execute
+    is_valid, error_msg = self.security.validate_command(command)
+                          ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^
+  File "C:\LMSTUDIO_TERMINAL_BRIDGE\security.py", line 79, in validate_command
+    self.logger.log_security_event(
+    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AttributeError: 'Logger' object has no attribute 'log_security_event'
+2026-03-05 20:52:19 | INFO     | bridge.router | Registered 1 tools
+2026-03-05 20:52:19 | INFO     | bridge.main | Executing single command: Get-Process | Select-Object -First 3 | Format-Table Name, Id, CPU
+2026-03-05 20:52:19 | ERROR    | bridge.security | Security BLOCK: Command contains blocked pattern: format
+2026-03-05 20:52:19 | ERROR    | bridge.executor | Command blocked by security: Command contains blocked pattern: format
+2026-03-05 20:52:37 | INFO     | bridge.router | Registered 1 tools
+2026-03-05 20:52:37 | INFO     | bridge.main | Executing single command: Get-Process | Select-Object -First 3 | Format-Table Name, Id, CPU
+2026-03-05 20:52:37 | INFO     | bridge.security | Security: Command validated: Get-Process | Select-Object -First 3 | Format-Tabl
+2026-03-05 20:52:37 | INFO     | bridge.executor | Executing: Get-Process | Select-Object -First 3 | Format-Table Name, Id, CPU
+2026-03-05 20:52:37 | INFO     | bridge.executor | Command executed: Get-Process | Select-Object -First 3 | Format-Table Name, Id, CPU
