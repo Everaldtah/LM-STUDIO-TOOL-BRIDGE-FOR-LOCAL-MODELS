@@ -10,6 +10,7 @@ import os
 import io
 import json
 import subprocess
+import threading
 from pathlib import Path
 
 # Force UTF-8 encoding for Windows console
@@ -36,6 +37,7 @@ class C:
     WHITE = '\033[37m'
     GRAY = '\033[38;5;245m'
     YELLOW = '\033[38;5;226m'
+    RED = '\033[38;5;203m'
 
 
 class NaturalChatBridge:
@@ -44,21 +46,22 @@ class NaturalChatBridge:
     def __init__(self):
         self.conversation_history = []
         self.running = True
+        self.request_timeout = 120  # Increased from 60 to 120 seconds
 
         # Set system prompt
         self.conversation_history.append({
             "role": "system",
             "content": """You are a helpful AI assistant with access to PowerShell commands on Windows.
 
-When the user asks questions that require system information, file operations, or system tasks, use the run_powershell_command tool.
+IMPORTANT RULES:
+1. Keep responses concise and helpful
+2. When users ask about WiFi, networks, or system info, ALWAYS use the run_powershell_command tool
+3. For WiFi networks: use "netsh wlan show networks mode=bssid" (not "show network profiles")
+4. Show command output clearly - format it for readability
+5. If a command fails, explain why and suggest alternatives
+6. The user types naturally - just respond helpfully
 
-Guidelines:
-- Be helpful and concise
-- Explain what you're doing
-- Show command output clearly
-- The user will type naturally - just respond helpfully
-
-Available tool: run_powershell_command - Execute PowerShell commands"""
+Available tool: run_powershell_command - Execute PowerShell commands with parameter "command""""
         })
 
     def print_header(self):
@@ -82,12 +85,17 @@ Available tool: run_powershell_command - Execute PowerShell commands"""
     def execute_powershell(self, command):
         """Execute PowerShell command and return result"""
         try:
+            # For certain commands, we might need longer timeout
+            timeout = COMMAND_TIMEOUT
+            if 'netsh' in command.lower() or 'scan' in command.lower():
+                timeout = 30  # Longer timeout for network commands
+
             result = subprocess.run(
                 [POWERSHELL_EXE, "-Command", command],
                 capture_output=True,
                 text=True,
                 encoding='utf-8',
-                timeout=COMMAND_TIMEOUT,
+                timeout=timeout,
                 creationflags=subprocess.CREATE_NO_WINDOW
             )
             return {
@@ -97,7 +105,7 @@ Available tool: run_powershell_command - Execute PowerShell commands"""
                 "return_code": result.returncode
             }
         except subprocess.TimeoutExpired:
-            return {"success": False, "error": f"Command timed out after {COMMAND_TIMEOUT}s"}
+            return {"success": False, "error": f"Command timed out after {timeout}s"}
         except Exception as e:
             return {"success": False, "error": str(e)}
 
@@ -133,7 +141,7 @@ Available tool: run_powershell_command - Execute PowerShell commands"""
                 LM_STUDIO_CHAT_ENDPOINT,
                 json=payload,
                 headers={"Content-Type": "application/json"},
-                timeout=60
+                timeout=self.request_timeout
             )
             response.raise_for_status()
             data = response.json()
@@ -150,12 +158,17 @@ Available tool: run_powershell_command - Execute PowerShell commands"""
                 return self.handle_tool_calls(tool_calls)
 
             # Return text content
-            return message.get("content", "I'm sorry, I couldn't generate a response.")
+            content = message.get("content", "")
+            if content:
+                return content
+            return "I'm sorry, I couldn't generate a response."
 
+        except requests.exceptions.Timeout:
+            return C.RED + "Request timed out. The model took too long to respond. Try a shorter prompt or use a faster model." + C.RESET
         except requests.exceptions.ConnectionError:
-            return C.RED + "Cannot connect to LM Studio. Make sure it's running with the API server enabled." + C.RESET
+            return C.RED + "Cannot connect to LM Studio. Make sure it's running with the API server enabled on port 1234." + C.RESET
         except Exception as e:
-            return f"Error: {str(e)}"
+            return f"{C.RED}Error:{C.RESET} {str(e)}"
 
     def handle_tool_calls(self, tool_calls):
         """Handle tool calls from the model"""
@@ -171,26 +184,30 @@ Available tool: run_powershell_command - Execute PowerShell commands"""
 
                 print()
                 print(C.BLUE + '  ⚙ ' + C.RESET + C.WHITE + f'Executing: {command}' + C.RESET)
+                print(C.GRAY + '  ' + '─' * 50 + C.RESET)
 
                 result = self.execute_powershell(command)
 
                 # Store tool call ID for response
                 result["tool_call_id"] = tool_call.get("id", "")
-
                 tool_results.append(result)
 
                 if result.get("success"):
                     if result.get("stdout"):
-                        print(C.GREEN + '  ✓ Output:' + C.RESET)
-                        for line in result["stdout"].split('\n')[:15]:
+                        output_lines = result["stdout"].split('\n')
+                        # Show first 20 lines
+                        for line in output_lines[:20]:
                             print(f'    {C.GRAY}{line}{C.RESET}')
+                        if len(output_lines) > 20:
+                            print(f'    {C.DIM}... ({len(output_lines) - 20} more lines){C.RESET}')
                 else:
                     error = result.get("error", result.get("stderr", "Unknown error"))
-                    print(C.YELLOW + f'  ⚠ {error}' + C.RESET)
+                    print(C.YELLOW + f'  ⚠ Error: {error}' + C.RESET)
 
                 print()
 
         # Get final response from model after tool execution
+        print(C.PURPLE + 'ai>  ' + C.RESET + C.GRAY + 'Processing results...' + C.RESET, end='', flush=True)
         return self.send_to_model("", tool_results)
 
     def run(self):
@@ -198,13 +215,27 @@ Available tool: run_powershell_command - Execute PowerShell commands"""
         self.print_header()
 
         # Test connection
+        print(C.CYAN + '  Checking connection to LM Studio...' + C.RESET, end='', flush=True)
         try:
-            requests.get(LM_STUDIO_CHAT_ENDPOINT.replace("/chat/completions", "/models"), timeout=2)
-            print(C.GREEN + '    ✓ Connected to LM Studio' + C.RESET)
-        except:
-            print(C.YELLOW + '    ⚠ LM Studio not detected. Start LM Studio with API server enabled.' + C.RESET)
+            response = requests.get(
+                LM_STUDIO_CHAT_ENDPOINT.replace("/chat/completions", "/models"),
+                timeout=5
+            )
+            if response.status_code == 200:
+                print(C.GREEN + ' ✓ Connected' + C.RESET)
+            else:
+                print(C.YELLOW + f ' ⚠ API returned status {response.status_code}' + C.RESET)
+        except Exception as e:
+            print(C.YELLOW + f ' ⚠ Could not connect: {e}' + C.RESET)
+            print()
+            print(C.WHITE + '  Make sure LM Studio is running:' + C.RESET)
+            print(C.WHITE + '  1. Open LM Studio' + C.RESET)
+            print(C.WHITE + '  2. Click the Server icon (⟠)' + C.RESET)
+            print(C.WHITE + '  3. Enable "Enable Server"' + C.RESET)
+            print(C.WHITE + '  4. Port should be 1234' + C.RESET)
 
         print()
+        print(C.ORANGE + '────────────────────────────────────────────────' + C.RESET)
 
         while self.running:
             try:
@@ -225,6 +256,22 @@ Available tool: run_powershell_command - Execute PowerShell commands"""
                 if user_input.lower() in ['/clear', 'clear']:
                     os.system('cls' if os.name == 'nt' else 'clear')
                     self.print_header()
+                    continue
+
+                # Direct command mode (start with !)
+                if user_input.startswith('!'):
+                    direct_command = user_input[1:].strip()
+                    print()
+                    print(C.BLUE + '  ⚙ ' + C.RESET + C.WHITE + f'Direct: {direct_command}' + C.RESET)
+                    result = self.execute_powershell(direct_command)
+                    if result.get("success"):
+                        if result.get("stdout"):
+                            for line in result["stdout"].split('\n')[:20]:
+                                print(f'    {C.GRAY}{line}{C.RESET}')
+                    else:
+                        print(C.YELLOW + f'  ⚠ {result.get("error", "Unknown error")}' + C.RESET)
+                    print()
+                    print(C.ORANGE + '────────────────────────────────────────────────' + C.RESET)
                     continue
 
                 # Show thinking indicator
