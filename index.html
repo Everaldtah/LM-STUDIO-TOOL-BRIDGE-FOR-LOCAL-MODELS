@@ -11,214 +11,189 @@
             box-sizing: border-box;
         }
 
+        @font-face {
+            font-family: 'Terminal';
+            src: local('Courier New'), local('Consolas'), monospace;
+        }
+
         body {
-            background-color: #1a1a1a;
+            background-color: #0d0d0d;
             min-height: 100vh;
             display: flex;
             justify-content: center;
             align-items: center;
             font-family: 'Courier New', 'Consolas', monospace;
             padding: 20px;
+            color: #ffffff;
         }
 
-        .terminal-wrapper {
+        .terminal {
             background-color: #0d0d0d;
-            border: 2px solid #ff6b00;
-            border-radius: 8px;
-            padding: 30px;
-            max-width: 900px;
+            border: 3px solid #ff6600;
+            padding: 40px 50px;
+            max-width: 950px;
             width: 100%;
-            box-shadow: 0 0 30px rgba(255, 107, 0, 0.2);
+            position: relative;
         }
 
-        /* Header Section */
-        .header {
-            text-align: center;
-            margin-bottom: 20px;
-        }
-
-        .header-border {
-            border: 2px dashed #ff6b00;
-            padding: 20px 40px;
+        /* Header */
+        .header-box {
+            border: 3px dashed #ff6600;
             display: inline-block;
+            padding: 15px 60px;
+            margin-bottom: 5px;
         }
 
         .title {
-            font-size: 48px;
+            font-size: 52px;
             font-weight: bold;
-            color: #ff6b00;
-            letter-spacing: 8px;
-            text-shadow: 2px 2px 4px rgba(255, 107, 0, 0.3);
+            color: #ff6600;
+            letter-spacing: 12px;
+            text-transform: uppercase;
         }
 
         .version {
-            font-size: 16px;
-            color: #888;
+            color: #888888;
+            font-size: 18px;
+            text-align: center;
             margin-top: 5px;
         }
 
-        .header-line {
-            border-top: 2px dashed #ff6b00;
+        .divider {
+            border-top: 3px dashed #ff6600;
             margin: 20px 0;
+            height: 0;
         }
 
-        /* Welcome Text */
+        /* Welcome */
         .welcome {
             text-align: center;
+            font-size: 20px;
+            margin-bottom: 35px;
+            line-height: 1.5;
+        }
+
+        .welcome span:first-child {
             color: #ffffff;
-            font-size: 18px;
-            margin-bottom: 30px;
-            line-height: 1.6;
         }
 
         .welcome .highlight {
-            color: #ff6b00;
+            color: #ff6600;
             font-weight: bold;
         }
 
-        .welcome .dim {
+        .welcome .subtitle {
             color: #aaaaaa;
         }
 
-        /* Main Content Grid */
-        .content-grid {
+        /* Content Grid */
+        .content {
             display: grid;
             grid-template-columns: 1fr 1fr;
-            gap: 30px;
+            gap: 40px;
             margin-bottom: 30px;
         }
 
         /* Left Column */
-        .left-column {
+        .left-col {
             display: flex;
             flex-direction: column;
             align-items: center;
         }
 
         .robot-box {
-            border: 2px dashed #ff6b00;
-            padding: 30px;
+            border: 3px dashed #ff6600;
+            padding: 25px;
             margin-bottom: 20px;
-            background-color: #111;
+            background: #0a0a0a;
         }
 
         .robot {
-            font-size: 12px;
-            line-height: 1.2;
+            font-size: 11px;
+            line-height: 1.1;
             white-space: pre;
-            color: #9b59b6;
             font-weight: bold;
-        }
-
-        .robot-eye {
-            color: #ffffff;
-        }
-
-        .env-info {
-            text-align: center;
-            color: #ffffff;
+            color: #9932cc;
         }
 
         .env-title {
             font-size: 18px;
             font-weight: bold;
-            margin-bottom: 10px;
+            margin-bottom: 8px;
         }
 
-        .env-subtitle {
+        .env-desc {
             font-size: 14px;
-            color: #ffffff;
+            color: #cccccc;
             margin-bottom: 10px;
         }
 
         .env-path {
-            font-size: 14px;
             color: #00ff00;
-            font-family: 'Courier New', monospace;
+            font-size: 14px;
         }
 
         /* Right Column */
-        .right-column {
+        .right-col {
             display: flex;
             flex-direction: column;
-            gap: 20px;
+            gap: 15px;
         }
 
-        .activity-box, .features-box {
-            border: 2px dashed #ff6b00;
-            padding: 20px;
-            background-color: #111;
+        .box {
+            border: 3px dashed #ff6600;
+            padding: 15px 20px;
+            background: #0a0a0a;
         }
 
         .box-title {
-            color: #ff6b00;
+            color: #ff6600;
             font-size: 16px;
             font-weight: bold;
-            margin-bottom: 15px;
+            margin-bottom: 12px;
         }
 
-        /* Activity List */
-        .activity-list {
-            list-style: none;
-        }
-
-        .activity-item {
+        .list-item {
             display: flex;
             justify-content: space-between;
-            color: #ffffff;
-            font-size: 14px;
-            padding: 5px 0;
+            font-size: 13px;
+            padding: 4px 0;
             border-bottom: 1px solid #222;
         }
 
-        .activity-item:last-child {
+        .list-item:last-child {
             border-bottom: none;
         }
 
-        .timestamp {
-            color: #666;
+        .list-item .action {
+            color: #ffffff;
         }
 
-        .more-text {
-            color: #666;
+        .list-item .timestamp {
+            color: #666666;
+        }
+
+        .list-item .cmd {
+            color: #9932cc;
+        }
+
+        .list-item .desc {
+            color: #ffffff;
+        }
+
+        .more {
+            color: #666666;
             font-style: italic;
             font-size: 12px;
-            margin-top: 10px;
-        }
-
-        /* Features List */
-        .features-list {
-            list-style: none;
-        }
-
-        .feature-item {
-            display: flex;
-            justify-content: space-between;
-            font-size: 14px;
-            padding: 5px 0;
-            border-bottom: 1px solid #222;
-        }
-
-        .feature-item:last-child {
-            border-bottom: none;
-        }
-
-        .command {
-            color: #9b59b6;
-            font-weight: bold;
-        }
-
-        .description {
-            color: #ffffff;
+            margin-top: 8px;
         }
 
         /* Instructions */
         .instructions {
             text-align: center;
-            color: #ffffff;
             font-size: 14px;
             line-height: 1.8;
-            margin-top: 20px;
+            margin-top: 25px;
         }
 
         .prompt {
@@ -232,7 +207,7 @@
             left: 0;
             width: 100%;
             height: 100%;
-            background-color: rgba(0, 0, 0, 0.9);
+            background: rgba(0, 0, 0, 0.95);
             display: none;
             justify-content: center;
             align-items: center;
@@ -240,110 +215,121 @@
         }
 
         .thinking-box {
-            border: 2px dashed #ff6b00;
-            padding: 40px;
-            background-color: #0d0d0d;
+            border: 3px dashed #ff6600;
+            padding: 50px;
             text-align: center;
-            animation: pulse-border 2s infinite;
+            animation: pulse 2s infinite;
         }
 
-        @keyframes pulse-border {
-            0%, 100% { border-color: #ff6b00; box-shadow: 0 0 10px rgba(255, 107, 0, 0.3); }
-            50% { border-color: #ff9500; box-shadow: 0 0 20px rgba(255, 107, 0, 0.6); }
+        @keyframes pulse {
+            0%, 100% {
+                border-color: #ff6600;
+                box-shadow: 0 0 10px rgba(255, 102, 0, 0.3);
+            }
+            50% {
+                border-color: #ff8800;
+                box-shadow: 0 0 30px rgba(255, 102, 0, 0.6);
+            }
         }
 
         .thinking-robot {
             font-size: 14px;
-            line-height: 1.2;
+            line-height: 1.1;
             white-space: pre;
-            color: #9b59b6;
-            margin: 20px 0;
-            animation: bounce 1s infinite;
+            color: #9932cc;
+            font-weight: bold;
+            animation: bounce 0.8s infinite;
         }
 
         @keyframes bounce {
             0%, 100% { transform: translateY(0); }
-            50% { transform: translateY(-10px); }
+            50% { transform: translateY(-8px); }
         }
 
         .thinking-text {
             color: #ffffff;
-            font-size: 16px;
+            font-size: 18px;
             margin-top: 20px;
         }
 
-        .thinking-dots {
+        .dots {
             display: inline-block;
-            margin-left: 10px;
         }
 
-        .thinking-dots span {
+        .dots span {
             animation: blink 1.4s infinite;
             animation-fill-mode: both;
         }
 
-        .thinking-dots span:nth-child(2) { animation-delay: 0.2s; }
-        .thinking-dots span:nth-child(3) { animation-delay: 0.4s; }
+        .dots span:nth-child(2) { animation-delay: 0.2s; }
+        .dots span:nth-child(3) { animation-delay: 0.4s; }
 
         @keyframes blink {
             0%, 80%, 100% { opacity: 0; }
             40% { opacity: 1; }
         }
 
-        /* Progress Bar */
-        .progress-container {
-            margin-top: 20px;
+        .progress {
+            margin-top: 25px;
         }
 
         .progress-bar {
-            width: 200px;
-            height: 8px;
-            background-color: #222;
-            border: 1px solid #ff6b00;
+            width: 250px;
+            height: 10px;
+            border: 2px solid #ff6600;
             margin: 0 auto;
-            overflow: hidden;
+            background: #111;
         }
 
         .progress-fill {
             height: 100%;
-            background-color: #ff6b00;
+            background: #ff6600;
             width: 0%;
-            transition: width 0.3s ease;
         }
 
-        .progress-fill.animated {
-            animation: progress 3s ease-in-out;
+        .progress-fill.animate {
+            animation: fill 3s ease-out forwards;
         }
 
-        @keyframes progress {
+        @keyframes fill {
             0% { width: 0%; }
-            50% { width: 70%; }
+            50% { width: 60%; }
             100% { width: 100%; }
         }
 
         /* Demo Button */
-        .demo-button {
+        .demo-btn {
             text-align: center;
             margin-top: 30px;
         }
 
-        .demo-btn {
-            background-color: transparent;
-            border: 2px solid #ff6b00;
-            color: #ff6b00;
+        .demo-btn button {
+            background: transparent;
+            border: 2px solid #ff6600;
+            color: #ff6600;
             padding: 12px 30px;
-            font-family: 'Courier New', monospace;
-            font-size: 16px;
+            font-family: inherit;
+            font-size: 15px;
             cursor: pointer;
-            transition: all 0.3s ease;
+            transition: all 0.3s;
         }
 
-        .demo-btn:hover {
-            background-color: #ff6b00;
+        .demo-btn button:hover {
+            background: #ff6600;
             color: #000;
         }
 
-        /* Scanline Effect */
+        /* Robot eye animation */
+        .eye {
+            animation: eye-blink 4s infinite;
+        }
+
+        @keyframes eye-blink {
+            0%, 45%, 55%, 100% { content: '●'; }
+            50% { content: '─'; }
+        }
+
+        /* Scanline effect */
         .scanlines {
             position: fixed;
             top: 0;
@@ -358,109 +344,105 @@
                 transparent 1px,
                 transparent 2px
             );
-            z-index: 9999;
+            z-index: 999;
         }
     </style>
 </head>
 <body>
     <div class="scanlines"></div>
 
-    <div class="terminal-wrapper">
+    <div class="terminal">
         <!-- Header -->
-        <div class="header">
-            <div class="header-border">
+        <div style="text-align: center;">
+            <div class="header-box">
                 <div class="title">LMBRIDGE</div>
                 <div class="version">v1.0.0</div>
             </div>
         </div>
 
-        <div class="header-line"></div>
+        <div class="divider"></div>
 
         <!-- Welcome -->
         <div class="welcome">
-            Welcome to <span class="highlight">LMBRIDGE</span> — <span class="dim">Local Model Terminal Bridge</span>
+            Welcome to <span class="highlight">LMBRIDGE</span> — <span class="subtitle">Local Model Terminal Bridge</span>
         </div>
 
         <!-- Main Content -->
-        <div class="content-grid">
-            <!-- Left Column -->
-            <div class="left-column">
+        <div class="content">
+            <!-- Left -->
+            <div class="left-col">
                 <div class="robot-box">
                     <pre class="robot">
-     _______
-    | <span class="robot-eye">●</span>   <span class="robot-eye">●</span> |
-    |   ^   |
-    |  ___  |
-    |  |_|  |
-    |_______|
-       | |
-      /   \
-     |     |
-                    </pre>
+     ████████
+    ██  ⬤  ⬤  ██
+    ██    ∩    ██
+    ██  ────   ██
+    ██  ⎛⎞    ██
+    ██  ⎝⎠    ██
+     ████████
+        │  │
+       ╱────╲
+      │      │
+     ╱        ╲
+    </pre>
                 </div>
-                <div class="env-info">
-                    <div class="env-title">Local Model Bridge Environment</div>
-                    <div class="env-subtitle">LM Studio Integration • PowerShell Control</div>
-                    <div class="env-path">/users/local/lmbridge</div>
-                </div>
+                <div class="env-title">Local Model Bridge Environment</div>
+                <div class="env-desc">LM Studio Integration • PowerShell Control</div>
+                <div class="env-path">/users/local/lmbridge</div>
             </div>
 
-            <!-- Right Column -->
-            <div class="right-column">
+            <!-- Right -->
+            <div class="right-col">
                 <!-- Recent Activity -->
-                <div class="activity-box">
+                <div class="box">
                     <div class="box-title">Recent Activity</div>
-                    <ul class="activity-list">
-                        <li class="activity-item">
-                            <span>Bridge initialized</span>
-                            <span class="timestamp">1m ago</span>
-                        </li>
-                        <li class="activity-item">
-                            <span>Connected to LM Studio API</span>
-                            <span class="timestamp">4m ago</span>
-                        </li>
-                        <li class="activity-item">
-                            <span>Tool registry loaded</span>
-                            <span class="timestamp">6m ago</span>
-                        </li>
-                        <li class="activity-item">
-                            <span>PowerShell command executed</span>
-                            <span class="timestamp">9m ago</span>
-                        </li>
-                        <li class="activity-item">
-                            <span>Security policy updated</span>
-                            <span class="timestamp">1h ago</span>
-                        </li>
-                    </ul>
-                    <div class="more-text">... /resume for more</div>
+                    <div class="list-item">
+                        <span class="action">Bridge initialized</span>
+                        <span class="timestamp">1m ago</span>
+                    </div>
+                    <div class="list-item">
+                        <span class="action">Connected to LM Studio API</span>
+                        <span class="timestamp">4m ago</span>
+                    </div>
+                    <div class="list-item">
+                        <span class="action">Tool registry loaded</span>
+                        <span class="timestamp">6m ago</span>
+                    </div>
+                    <div class="list-item">
+                        <span class="action">PowerShell command executed</span>
+                        <span class="timestamp">9m ago</span>
+                    </div>
+                    <div class="list-item">
+                        <span class="action">Security policy updated</span>
+                        <span class="timestamp">1h ago</span>
+                    </div>
+                    <div class="more">... /resume for more</div>
                 </div>
 
                 <!-- What's New -->
-                <div class="features-box">
+                <div class="box">
                     <div class="box-title">What's New</div>
-                    <ul class="features-list">
-                        <li class="feature-item">
-                            <span class="description">create autonomous command agents</span>
-                            <span class="command">/agents</span>
-                        </li>
-                        <li class="feature-item">
-                            <span class="description">direct terminal execution</span>
-                            <span class="command">/terminal</span>
-                        </li>
-                        <li class="feature-item">
-                            <span class="description">inspect command sandbox</span>
-                            <span class="command">/security</span>
-                        </li>
-                        <li class="feature-item">
-                            <span class="description">background shell sessions</span>
-                            <span class="command">ctrl+b</span>
-                        </li>
-                        <li class="feature-item">
-                            <span class="description">view tool registry</span>
-                            <span class="command">/tools</span>
-                        </li>
-                    </ul>
-                    <div class="more-text">... /help for more</div>
+                    <div class="list-item">
+                        <span class="desc">create autonomous command agents</span>
+                        <span class="cmd">/agents</span>
+                    </div>
+                    <div class="list-item">
+                        <span class="desc">direct terminal execution</span>
+                        <span class="cmd">/terminal</span>
+                    </div>
+                    <div class="list-item">
+                        <span class="desc">inspect command sandbox</span>
+                        <span class="cmd">/security</span>
+                    </div>
+                    <div class="list-item">
+                        <span class="desc">background shell sessions</span>
+                        <span class="cmd">ctrl+b</span>
+                    </div>
+                    <div class="list-item">
+                        <span class="desc">view tool registry</span>
+                        <span class="cmd">/tools</span>
+                    </div>
+                    <div class="more">... /help for more</div>
                 </div>
             </div>
         </div>
@@ -473,29 +455,31 @@
         </div>
 
         <!-- Demo Button -->
-        <div class="demo-button">
-            <button class="demo-btn" onclick="showThinkingAnimation()">&gt;_ DEMO THINKING ANIMATION</button>
+        <div class="demo-btn">
+            <button onclick="showThinking()">▶ DEMO THINKING ANIMATION</button>
         </div>
     </div>
 
     <!-- Thinking Overlay -->
-    <div class="thinking-overlay" id="thinkingOverlay" onclick="hideThinkingAnimation()">
+    <div class="thinking-overlay" id="thinkingOverlay" onclick="hideThinking()">
         <div class="thinking-box">
             <pre class="thinking-robot" id="thinkingRobot">
-     _______
-    | <span class="robot-eye">●</span>   <span class="robot-eye">●</span> |
-    |   ^   |
-    |  ___  |
-    |  ~~~  |
-    |_______|
-       | |
-      /   \
-     |     |
-            </pre>
+     ████████
+    ██  ⬤  ⬤  ██
+    ██    ∩    ██
+    ██  ~~~~   ██
+    ██  ⎛⎞    ██
+    ██  ⎝⎠    ██
+     ████████
+        │  │
+       ╱────╲
+      │      │
+     ╱        ╲
+</pre>
             <div class="thinking-text">
-                Processing<span class="thinking-dots"><span>.</span><span>.</span><span>.</span></span>
+                Processing<span class="dots"><span>.</span><span>.</span><span>.</span></span>
             </div>
-            <div class="progress-container">
+            <div class="progress">
                 <div class="progress-bar">
                     <div class="progress-fill" id="progressFill"></div>
                 </div>
@@ -504,65 +488,42 @@
     </div>
 
     <script>
-        const thinkingMessages = [
-            "Connecting to LM Studio...",
-            "Analyzing command...",
-            "Executing PowerShell...",
-            "Processing response...",
-            "Complete!"
-        ];
-
         const robotStates = [
-            `     _______\n    | ●   ● |\n    |   ^   |\n    |  ___  |\n    |  ~~~  |\n    |_______|\n       | |\n      /   \\\n     |     |`,
-            `     _______\n    | ◉   ◉ |\n    |   o   |\n    |  ___  |\n    |  :::  |\n    |_______|\n       | |\n      /   \\\n     |     |`,
-            `     _______\n    | ◉   ◉ |\n    |   O   |\n    |  ___  |\n    |  ***  |\n    |_______|\n       | |\n      /   \\\n     |     |`,
-            `     _______\n    | ◉   ◉ |\n    |   *   |\n    |  ___  |\n    |  >>>  |\n    |_______|\n       | |\n      /   \\\n     |     |`,
-            `     _______\n   | ●   ● |\n    |   ^   |\n    |  ___  |\n    |  =^=  |\n    |_______|\n       | |\n      /   \\\n     |     |`
+            `     ████████\n    ██  ⬤  ⬤  ██\n    ██    ∩    ██\n    ██  ~~~~   ██\n    ██  ⎛⎞    ██\n    ██  ⎝⎠    ██\n     ████████\n        │  │\n       ╱────╲\n      │      │\n     ╱        ╲\n`,
+            `     ████████\n    ██  ◉  ◉  ██\n    ██    O    ██\n    ██  ::::   ██\n    ██  ⎛⎞    ██\n    ██  ⎝⎠    ██\n     ████████\n        │  │\n       ╱────╲\n      │      │\n     ╱        ╲\n`,
+            `     ████████\n    ██  ◎  ◎  ██\n    ██    ◉    ██\n    ██  ****   ██\n    ██  ⎛⎞    ██\n    ██  ⎝⎠    ██\n     ████████\n        │  │\n       ╱────╲\n      │      │\n     ╱        ╲\n`,
+            `     ████████\n    ██  ◉  ◉  ██\n    ██    *    ██\n    ██  >>>>   ██\n    ██  ⎛⎞    ██\n    ██  ⎝⎠    ██\n     ████████\n        │  │\n       ╱────╲\n      │      │\n     ╱        ╲\n`,
+            `     ████████\n    ██  ⬤  ⬤  ██\n    ██    ∩    ██\n    ██  =^=    ██\n    ██  ⎛⎞    ██\n    ██  ⎝⎠    ██\n     ████████\n        │  │\n       ╱────╲\n      │      │\n     ╱        ╲\n`
         ];
 
-        function showThinkingAnimation() {
+        let interval;
+
+        function showThinking() {
             const overlay = document.getElementById('thinkingOverlay');
-            const progressFill = document.getElementById('progressFill');
-            const thinkingRobot = document.getElementById('thinkingRobot');
+            const progress = document.getElementById('progressFill');
+            const robot = document.getElementById('thinkingRobot');
 
             overlay.style.display = 'flex';
-            progressFill.classList.remove('animated');
+            progress.classList.remove('animate');
+            setTimeout(() => progress.classList.add('animate'), 50);
 
-            // Reset and start progress
-            setTimeout(() => {
-                progressFill.classList.add('animated');
-            }, 100);
-
-            // Animate robot states
-            let stateIndex = 0;
-            const stateInterval = setInterval(() => {
-                stateIndex = (stateIndex + 1) % robotStates.length;
-                thinkingRobot.innerHTML = robotStates[stateIndex]
-                    .replace(/●/g, '<span class="robot-eye">●</span>');
-            }, 500);
-
-            // Store interval for cleanup
-            overlay.dataset.interval = stateInterval;
+            let i = 0;
+            interval = setInterval(() => {
+                i = (i + 1) % robotStates.length;
+                robot.textContent = robotStates[i];
+            }, 600);
         }
 
-        function hideThinkingAnimation() {
+        function hideThinking() {
             const overlay = document.getElementById('thinkingOverlay');
-            const progressFill = document.getElementById('progressFill');
-
-            // Clear state interval
-            if (overlay.dataset.interval) {
-                clearInterval(parseInt(overlay.dataset.interval));
-            }
-
+            const progress = document.getElementById('progressFill');
+            clearInterval(interval);
             overlay.style.display = 'none';
-            progressFill.classList.remove('animated');
+            progress.classList.remove('animate');
         }
 
-        // Keyboard shortcut to close
         document.addEventListener('keydown', (e) => {
-            if (e.key === 'Escape') {
-                hideThinkingAnimation();
-            }
+            if (e.key === 'Escape') hideThinking();
         });
     </script>
 </body>
