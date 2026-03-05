@@ -346,10 +346,10 @@ Interactive Mode Commands:
     )
 
     parser.add_argument(
-        "--voice",
-        "-v",
+        "--chat",
+        "-c",
         action="store_true",
-        help="Start voice-first natural interface (no typing required)"
+        help="Start natural chat mode (no ask: prefix needed)"
     )
 
     return parser.parse_args()
@@ -371,11 +371,11 @@ def main() -> int:
         subprocess.run([sys.executable, str(landing_script)])
         return 0
 
-    # Handle --voice flag
-    if args.voice:
+    # Handle --chat flag
+    if args.chat:
         import subprocess
-        voice_script = Path(__file__).parent / "voice_bridge.py"
-        subprocess.run([sys.executable, str(voice_script)])
+        chat_script = Path(__file__).parent / "chat.py"
+        subprocess.run([sys.executable, str(chat_script)])
         return 0
 
     bridge = TerminalBridge()
