@@ -338,6 +338,13 @@ Interactive Mode Commands:
         version=f"{PROJECT_NAME} v{VERSION}"
     )
 
+    parser.add_argument(
+        "--landing",
+        "-l",
+        action="store_true",
+        help="Show the native CLI landing page"
+    )
+
     return parser.parse_args()
 
 
@@ -349,6 +356,14 @@ def main() -> int:
         Exit code
     """
     args = parse_arguments()
+
+    # Handle --landing flag
+    if args.landing:
+        import subprocess
+        landing_script = Path(__file__).parent / "cli_landing.py"
+        subprocess.run([sys.executable, str(landing_script)])
+        return 0
+
     bridge = TerminalBridge()
 
     try:
