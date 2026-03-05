@@ -345,6 +345,13 @@ Interactive Mode Commands:
         help="Show the native CLI landing page"
     )
 
+    parser.add_argument(
+        "--voice",
+        "-v",
+        action="store_true",
+        help="Start voice-first natural interface (no typing required)"
+    )
+
     return parser.parse_args()
 
 
@@ -362,6 +369,13 @@ def main() -> int:
         import subprocess
         landing_script = Path(__file__).parent / "cli_landing.py"
         subprocess.run([sys.executable, str(landing_script)])
+        return 0
+
+    # Handle --voice flag
+    if args.voice:
+        import subprocess
+        voice_script = Path(__file__).parent / "voice_bridge.py"
+        subprocess.run([sys.executable, str(voice_script)])
         return 0
 
     bridge = TerminalBridge()
